@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Score Predictor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #0f0c29);
+            background-size: 400% 400%;
+            animation: gradientBG 8s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+
+        .card-wrapper { perspective: 1000px; }
+
+        .container {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 50px 40px;
+            border-radius: 24px;
+            width: 420px;
+            text-align: center;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            position: relative;
+            transition: transform 0.1s ease;
+            transform-style: preserve-3d;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #f093fb, #667eea, #764ba2, #f093fb);
+            background-size: 300% 300%;
+            border-radius: 26px;
+            z-index: -1;
+            animation: borderGlow 4s ease infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .logo { font-size: 50px; margin-bottom: 10px; }
+
+        h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 0 30px rgba(240,147,251,0.8);
+        }
+
+        p.subtitle {
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 35px;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .input-group label {
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-group span {
+            position: absolute;
+            left: 15px;
+            bottom: 14px;
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            font-size: 15px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder { color: rgba(255,255,255,0.25); }
+
+        input:focus {
+            border-color: #f093fb;
+            background: rgba(240,147,251,0.1);
+            box-shadow: 0 0 20px rgba(240,147,251,0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::before { left: 100%; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(240,147,251,0.5); }
+
+        .error {
+            background: rgba(255,80,80,0.15);
+            border: 1px solid rgba(255,80,80,0.3);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .login-link {
+            margin-top: 25px;
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #f093fb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover { color: #667eea; }
+    </style>
+</head>
+<body>
+    <div class="particle" style="left:10%; animation-duration:8s;"></div>
+    <div class="particle" style="left:30%; animation-duration:12s; animation-delay:2s;"></div>
+    <div class="particle" style="left:60%; animation-duration:9s; animation-delay:4s;"></div>
+    <div class="particle" style="left:85%; animation-duration:11s; animation-delay:1s;"></div>
+
+    <div class="card-wrapper" id="cardWrapper">
+        <div class="container" id="card">
+            <div class="logo">✨</div>
+            <h1>Create Account</h1>
+            <p class="subtitle">JOIN THE SCORE PREDICTOR</p>
+
+            {% if error %}
+            <div class="error">⚠️ {{ error }}</div>
+            {% endif %}
+
+            <form action="/register" method="POST">
+                <div class="input-group">
+                    <label>USERNAME</label>
+                    <span>👤</span>
+                    <input type="text" name="username" 
+                           placeholder="Choose a username" required>
+                </div>
+                <div class="input-group">
+                    <label>PASSWORD</label>
+                    <span>🔒</span>
+                    <input type="password" name="password" 
+                           placeholder="Choose a password" required>
+                </div>
+                <button type="submit">🚀 Create Account</button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="/login">Sign in here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+        const wrapper = document.getElementById('cardWrapper');
+        wrapper.addEventListener('mousemove', (e) => {
+            const rect = wrapper.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width/2;
+            const y = e.clientY - rect.top - rect.height/2;
+            card.style.transform = `rotateX(${(-y/rect.height)*15}deg) rotateY(${(x/rect.width)*15}deg)`;
+        });
+        wrapper.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateX(0) rotateY(0)';
+        });
+    </script>
+</body>
+</html>
